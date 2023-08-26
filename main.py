@@ -2,14 +2,14 @@ import requests
 import os
 
 # Seu token de acesso pessoal do GitHub
-access_token = "SEU_TOKEN_AQUI"
+access_token = os.environ.get('python_token')
 
 # URL da API do GitHub para listar seus repositórios
-repos_url = "https://api.github.com/user/repos"
+repos_url = "https://api.github.com/randeldarlei/repos"
 
 # Cabeçalho HTTP com o token de acesso
 headers = {
-    "Authorization": f"token {access_token}"
+    "Authorization": f"token {python_token}"
 }
 
 # Fazendo a solicitação GET para a API do GitHub
@@ -41,4 +41,4 @@ if response.status_code == 200:
         else:
             print(f"Falha ao baixar {repo_name}.")
 else:
-    print("Falha ao acessar a API do GitHub.")
+    print("Falha ao acessar a API do GitHub.") 
