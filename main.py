@@ -1,35 +1,33 @@
 import requests
 import os
 
-# Seu token de acesso pessoal do GitHub
-access_token = os.environ.get('python_token')
+# AUTH GITHUB_API
+access_token = os.environ.get('GITHUB_TOKEN')
 
-# URL da API do GitHub para listar seus repositórios
+# REPOS VAR DECLARATION
 repos_url = "https://api.github.com/randeldarlei/repos"
 
-# Cabeçalho HTTP com o token de acesso
+# MAKE REQUEST FROM GITHUB API
 headers = {
-    "Authorization": f"token {python_token}"
+    "Authorization": f"token {GITHUB_TOKEN}"
 }
-
-# Fazendo a solicitação GET para a API do GitHub
 response = requests.get(repos_url, headers=headers)
 
-# Verificando se a solicitação foi bem-sucedida
+# VALIDATE REQUEST
 if response.status_code == 200:
     repos = response.json()
 
     for repo in repos:
-        repo_name = repo["name"]
+        repo_name = repo["Dialog-Bot"]
         archive_url = f"https://api.github.com/repos/{repo['full_name']}/zipball"
         
-        # Aqui você pode usar uma biblioteca Python para clonar o repositório, como o GitPython.
+        # GITPYTHON LIB DOWNLOAD A REPO.
 
-        print(f"Baixando {repo_name}...")
+        print(f"Download {repo_name}...")
         response = requests.get(archive_url, headers=headers, stream=True)
 
         if response.status_code == 200:
-        # Crie uma pasta para cada repositório e salve o arquivo zip lá
+        # MAKE A ZIP FILE AND SAVE FILES
             os.makedirs(repo_name, exist_ok=True)
             zip_file_path = os.path.join(repo_name, f"{repo_name}.zip")
             
@@ -37,8 +35,8 @@ if response.status_code == 200:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
             
-            print(f"{repo_name} baixado com sucesso.")
+            print(f"{repo_name} download susscesfull.")
         else:
-            print(f"Falha ao baixar {repo_name}.")
+            print(f"Download failed {repo_name}.")
 else:
-    print("Falha ao acessar a API do GitHub.") 
+    print("Error cannot access GITHUB API.") 
