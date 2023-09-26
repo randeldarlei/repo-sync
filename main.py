@@ -1,19 +1,34 @@
 import requests
+import json
 
-# AUTH GITHUB_API
-token = "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"
-url = "https://api.github.com/repositories"
-headers = {
-    'Accept': 'application/vnd.github+json' ,
-    'Authorization': f'Bearer {token}' ,
-    'X-GitHub-Api-Version': '2022-11-28'
-}
-# Realiza a chamada de API
-response = requests.get(url, headers=headers)
+# Classe recebe como parâmetro o nome do usuário.
+class ListaDeRepositorios():
 
-if response.status_code == 200:
-    data =response.json()
-    for repo in data:
-        print(repo['name'])
-else:
-    print(f"Erro na chamada de API: {response.status_code} - {response.text}") 
+    def __init__(self, usuario):
+        self._usuario = usuario
+
+# Função que faz a requisição na API
+    def requisicao_api(self):
+        resposta = requests.get(
+            f'https://api.github.com/users/{self._usuario}/repos')
+        
+# Filtra a resposta da API 
+    def requisicao_api(self):
+        resposta = requests.get(
+            f'https://api.github.com/users/{self._usuario}/repos')
+        if resposta.status_code == 200:
+            return resposta.json()
+        else:
+            return resposta.status_code
+
+# Listar repositorios
+    def imprime_repositorios(self):
+        dados_api = self.requisicao_api()
+        if type(dados_api) is not int:
+            for i in range(len(dados_api)):
+                print(dados_api[i]['name'])
+        else:
+            print(dados_api)
+
+repositorios = ListaDeRepositorios('randeldarlei')
+repositorios.imprime_repositorios()
