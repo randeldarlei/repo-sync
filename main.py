@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 
 # Classe recebe como parâmetro o nome do usuário.
 class ListaDeRepositorios():
@@ -20,6 +21,17 @@ class ListaDeRepositorios():
             return resposta.json()
         else:
             return resposta.status_code
+        
+# Copiar Repositórios para o arquivo
+    def copiar_repositorios_para_arquivo(self, nome_arquivo):
+        dados_api = self.requisicao_api()
+        if type(dados_api) is not int:
+            with open(nome_arquivo, 'w') as arquivo:
+                for repo in dados_api:
+                    arquivo.write(repo['name'] + '\n')
+
+        else:
+            print(f"Erro ao obter os dados da API. Código de status: {dados_api}")
 
 # Listar repositorios
     def imprime_repositorios(self):
@@ -30,5 +42,7 @@ class ListaDeRepositorios():
         else:
             print(dados_api)
 
+# Transformar saída em arquivo
 repositorios = ListaDeRepositorios('randeldarlei')
-repositorios.imprime_repositorios()
+repositorios.copiar_repositorios_para_arquivo('repositorios.txt')
+
