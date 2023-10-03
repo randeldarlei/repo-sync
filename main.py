@@ -1,6 +1,14 @@
 import requests
 import json
 import os
+import boto3
+
+# Autenticação na AWS
+aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
+aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
+region_name = os.environ.get("AWS_DEFAULT_REGION")
+
+s3 = boto3.resource('s3')
 
 # Classe recebe como parâmetro o nome do usuário.
 class ListaDeRepositorios():
@@ -46,3 +54,8 @@ class ListaDeRepositorios():
 repositorios = ListaDeRepositorios('randeldarlei')
 repositorios.copiar_repositorios_para_arquivo('repositorios.txt')
 
+for bucket in s3.buckets.all():
+    print(bucket.name)
+
+with open('repositorios.txt', 'rb') as data:
+    s3.Bucket('my-bucket').put_object(Key='repositorios.txt', Body=data)    
